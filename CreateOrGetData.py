@@ -1,8 +1,8 @@
 
 from useful_functions import ReaderConfig
-from sqlalchemy import create_engine
+from useful_functions import GetData
+from sqlalchemy import create_engine, Double, String, Table, MetaData, Date, Column
 from sqlalchemy import text
-
 
 config = ReaderConfig('credenciales.ini')
 map_parameters = config.get_credentials()
@@ -20,7 +20,27 @@ engine = create_engine(
     connectQuery, echo=True
 )
 
-with engine.connect() as connection:
-    connection.execute(text('DROP TABLE IF EXISTS example'))
-    connection.execute(text('CREATE TABLE example (id INTEGER, name VARCHAR(20))'))
-    connection.commit()
+connection = engine.connect()
+connection.execute(text('DROP TABLE IF EXISTS Time_Series_FX'))
+
+meta = MetaData()
+
+timeSeries = Table(
+    'Time_Series_FX', meta, 
+    Column('from_symbol',String(5), primary_key=True), 
+    Column('to_symbol',  String(5), primary_key=True), 
+    Column('date',  Date), 
+    Column('1_open', Double), 
+    Column('2_high', Double), 
+    Column('3_low',  Double), 
+    Column('4_close',Double), 
+)
+
+meta.create_all(engine)
+connection.commit()
+
+api = config.get_api()
+data = GetData(api_=api)
+data_json = data.get_json('EUR','USD')
+tipos_data = list(data_json.keys())
+print(len(data_json[tipos_data[1]]))
