@@ -1,4 +1,4 @@
-# __API MaríaDB__
+# __FASTAPI MaríaDB__
 
 proyecto realizado con el fin de reforzar el uso de FastAPI, obteniendo información de Alphaventage
 
