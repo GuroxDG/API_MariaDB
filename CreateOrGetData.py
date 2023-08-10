@@ -1,7 +1,7 @@
 import sys
 from useful_functions import ReaderConfig
 from useful_functions import GetData
-from sqlalchemy import create_engine, Double, String, Table, MetaData, Date, Column
+from sqlalchemy import create_engine, Double, String, Table, MetaData, Date, Column, Select
 from sqlalchemy import text
 
 config = ReaderConfig('credenciales.ini')
@@ -21,7 +21,6 @@ engine = create_engine(
 )
 
 connection = engine.connect()
-connection.execute(text('DROP TABLE IF EXISTS Time_Series_FX'))
 
 meta = MetaData()
 
@@ -39,11 +38,20 @@ timeSeries = Table(
 meta.create_all(engine)
 connection.commit()
 
+from_symbol = sys.argv[1]
+to_symbol = sys.argv[2]
+
+validateQuery = f"SELECT * FROM Time_Series_FX WHERE from_symbol = '{from_symbol}' AND to_symbol = '{to_symbol}' limit 1"
+output = connection.execute(text(validateQuery))
+resultado = output.fetchall()
+
+if len(resultado) > 0:
+    print(f'ya exite información respecto a from_symbol = {from_symbol} y to_symbol = {to_symbol}')
+    sys.exit(1)
+
 api = config.get_api()
 data = GetData(api_=api)
 
-from_symbol = 'EUR'
-to_symbol = 'USD'
 data_json = data.get_json(from_symbol,to_symbol)
 tipos_data = list(data_json.keys())
 
