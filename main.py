@@ -1,16 +1,17 @@
-import configparser
 
+from useful_functions import ReaderConfig
 from sqlalchemy import create_engine
 from sqlalchemy import text
 
-config = configparser.ConfigParser()
-config.read('credenciales.ini')
 
-user = config['LOAD']['user']
-password = config['LOAD']['password']
-host = config['LOAD']['host']
-port = int(config['LOAD']['port'])
-database = config['LOAD']['database']
+config = ReaderConfig('credenciales.ini')
+map_parameters = config.get_credentials()
+
+user     = map_parameters['user']
+password = map_parameters['password']
+host     = map_parameters['host']
+port     = map_parameters['port']
+database = map_parameters['database']
 
 connectQuery = f'mariadb+mariadbconnector://{user}:{password}@{host}:{port}/{database}'
 print(f'string de conección -> {connectQuery}')
