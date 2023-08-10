@@ -1,19 +1,25 @@
-import sqlalchemy
 import configparser
-from sqlalchemy.ext.declarative import declarative_base
+
+from sqlalchemy import create_engine
+from sqlalchemy import text
 
 config = configparser.ConfigParser()
 config.read('credenciales.ini')
 
-user=config['LOAD']['user']
-password=config['LOAD']['password']
-host=config['LOAD']['host']
-port=int(config['LOAD']['port'])
-database=config['LOAD']['database']
+user = config['LOAD']['user']
+password = config['LOAD']['password']
+host = config['LOAD']['host']
+port = int(config['LOAD']['port'])
+database = config['LOAD']['database']
 
 connectQuery = f'mariadb+mariadbconnector://{user}:{password}@{host}:{port}/{database}'
-print(connectQuery)
+print(f'string de conección -> {connectQuery}')
 
-engine = sqlalchemy.create_engine(
-    connectQuery
+engine = create_engine(
+    connectQuery, echo=True
 )
+
+with engine.connect() as connection:
+    connection.execute(text('DROP TABLE IF EXISTS example'))
+    connection.execute(text('CREATE TABLE example (id INTEGER, name VARCHAR(20))'))
+    connection.commit()
