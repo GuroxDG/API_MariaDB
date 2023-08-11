@@ -42,3 +42,13 @@ def select_query(query: Query):
 @user.post('/h')
 def insert_info(data: ExchageFX):
     return insertData(data)
+
+@user.get('/prueba')
+def insert_info():
+    valor = {
+        "status":"Success",
+        "response":[
+            ["USUA","NOMB","UFEC","CLAV","PERF","CHEC"]
+        ]
+    }
+    return valor
