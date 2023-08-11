@@ -1,9 +1,10 @@
 from fastapi import APIRouter, Path
+from sqlalchemy import text
 from enum import Enum
 from cryptography.fernet import Fernet
 from config.plugMariaDB import conn
 from models.timeSeries import timeSeries
-from schemas.timeSeries import TimeSeries, ExchageFX
+from schemas.timeSeries import TimeSeries, ExchageFX, Query
 from utils.get_data import insertData
 
 from typing import List
@@ -30,6 +31,13 @@ async def get_license_plate(license : str = Path(..., regex=r'^7\w{2}-\d{3}-\w{2
 def get_user(val: str):
     result = conn.execute(timeSeries.select().where(timeSeries.c.from_symbol == val))
     return result
+
+@user.post('/query')
+def select_query(query: Query):
+    consulta = query.query
+    print(consulta)
+    result = conn.execute(text(consulta))
+    return 'ok'
 
 @user.post('/h')
 def insert_info(data: ExchageFX):

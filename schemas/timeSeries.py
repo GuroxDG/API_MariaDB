@@ -15,5 +15,8 @@ class ExchageFX(BaseModel):
     from_symbol : str
     to_symbol : str
 
+class Query(BaseModel):
+    query : str
+
 class UserCount(BaseModel):
-    total: int
+    total : int
