@@ -26,7 +26,10 @@ def insertData(data = dict):
     data = GetData(api_=api)
     data_json = data.get_json(from_symbol,to_symbol)
     tipos_data = list(data_json.keys())
-    print(tipos_data)
+
+    if len(tipos_data) == 1 or len(tipos_data) > 2:
+        return f'Error en parametros -> from_symbol = {from_symbol} y to_symbol = {to_symbol}'
+    
     data_insert = data_json[tipos_data[1]]
     data_insert = [data_insert[i]|{'date':i, 'from_symbol': from_symbol, 'to_symbol':to_symbol} for i in data_insert]
 
@@ -38,6 +41,8 @@ def insertData(data = dict):
     conn.execute(
         timeSeries.insert(), data_insert_format                   
     )
+    
+    conn.commit()
 
     respuesta = {
         'Consulta': checkQuery,
