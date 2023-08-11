@@ -3,7 +3,8 @@ from enum import Enum
 from cryptography.fernet import Fernet
 from config.plugMariaDB import conn
 from models.timeSeries import timeSeries
-from schemas.timeSeries import TimeSeries
+from schemas.timeSeries import TimeSeries, ExchageFX
+from utils.get_data import insertData
 
 from typing import List
 from starlette.status import HTTP_204_NO_CONTENT
@@ -37,6 +38,10 @@ async def get_license_plate(license : str = Path(..., regex=r'^7\w{2}-\d{3}-\w{2
 def get_user(val: str):
     result = conn.execute(timeSeries.select().where(timeSeries.c.from_symbol == val))
     return result
+
+@user.post('/h')
+def insert_info(data: ExchageFX):
+    return insertData(data)
 
 # @user.get('/users/{type}/{id}')
 # async def get_user_t(type: str, id: int):

@@ -11,5 +11,9 @@ class TimeSeries(BaseModel):
     low  : float 
     close: float 
 
+class ExchageFX(BaseModel):
+    from_symbol : str
+    to_symbol : str
+
 class UserCount(BaseModel):
     total: int
