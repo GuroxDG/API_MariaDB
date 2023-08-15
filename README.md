@@ -1,6 +1,6 @@
 # __FASTAPI MariaDB__
 
-proyecto realizado con el fin de reforzar el uso de FastAPI, obteniendo información de Alphaventage
+proyecto realizado con el fin de reforzar el uso de FastAPI, obteniendo información de Alphaventage, enfocandose en la información relacionada al cambio de moneda, la API desarrolla permite ingresar la información a una base de datos (MariaDB) yrealizar búsquedaas relacionada a la información almacenada en dicha búsqueda
 
 ## __Requerimientos__
 1. Instalar las librerías descritas en el archivo requirements.txt
